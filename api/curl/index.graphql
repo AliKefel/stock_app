@@ -31,8 +31,6 @@ type Quote {
 type Quotes{
   name: String
   value: Quote
-
-
 }
 type Query {
   quote(symbol: String): Quote
