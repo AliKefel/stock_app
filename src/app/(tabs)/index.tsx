@@ -1,7 +1,6 @@
 import { StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { Text, View } from '@/src/components/Themed';
 import { Stack } from 'expo-router';
-import top5 from '@/assets/data/top5.json';
 import StockListItem from '@/src/components/StockListItem';
 import { useQuery, gql } from '@apollo/client';
  
@@ -15,7 +14,7 @@ query MyQuery($symbol: String) {
       symbol
       percent_change
       close
-    }
+    } 
   }
 }`; 
 
@@ -23,7 +22,7 @@ query MyQuery($symbol: String) {
 export default function TabOneScreen() {
 
 
-  const {data, loading, error} = useQuery(query, {variables: {symbol: 'AAPL,IBM,MSFT,GME,AMC,KULR,IBIO'}});  
+  const {data, loading, error} = useQuery(query, {variables: {symbol: 'GME,NVDA,IBM,KULR,'}});
 
   if(loading){
     return <ActivityIndicator/>
@@ -46,7 +45,6 @@ console.log(JSON.stringify(stocks, null, 2));
       data={stocks} 
       renderItem={({item}) => <StockListItem stock={item}/>} 
       contentContainerStyle = {{ gap: 20, padding: 10, }}
-      
       />
 
      

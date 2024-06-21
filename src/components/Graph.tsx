@@ -1,22 +1,44 @@
 import { View, Text } from './Themed'
 import { LineGraph, GraphPoint } from 'react-native-graph'
 import Colors from '../constants/Colors'
-import timeseries from '@/assets/data/timeseries.json'
 import { MonoText } from './StyledText'
 import { green } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
 import { useState } from 'react'
+import { useQuery, gql } from '@apollo/client'
+import { ActivityIndicator } from 'react-native'
 
-const graph = () => {
 
-    const points: GraphPoint[] = timeseries.values.map((value) => ({
+const query = gql`
+    query MyQuery($symbol:String, $interval:String){
+    time_series(interval: $interval, symbol: $symbol) {
+    values {
+      close
+      datetime
+    }
+  }
+}`;
+ 
+const graph = ({symbol}: {symbol: string}) => {
+
+
+    const [selectedPoint, setSelectedPoint] = useState<GraphPoint>();
+
+    const { data, loading, error } = useQuery(query, {variables: {symbol,interval: '1day', }});
+
+    if(loading){
+        return <ActivityIndicator/>
+    } 
+    if(error){  
+        return <Text>Failed to fetch stock</Text>
+    }
+    console.log(data);
+
+    const points: GraphPoint[] = data.time_series.values.map((value) => ({
         date: new Date(value.datetime),
         value: Number.parseFloat(value.close),
-    }))
+    }));
 
-    const [selectedPoint, setSelectedPoint] = useState<GraphPoint>(points[points.length - 1 ]);
-
-    
-
+  
     const onPointSelected = (point: GraphPoint) => {
         // console.log(point.value);
         setSelectedPoint(point);
@@ -48,4 +70,4 @@ const graph = () => {
     )
 }
 
-export default graph
+export default graph;
