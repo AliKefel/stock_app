@@ -28,19 +28,22 @@ type Quote {
   timestamp: Int
   volume: Date
 }
-type Quotes{
+
+type Quotes {
   name: String
   value: Quote
 }
+
 type Query {
   quote(symbol: String): Quote
-    @rest(endpoint: "https://api.twelvedata.com/quote"
-    configuration: "twelve-data"
+    @rest(
+      endpoint: "https://api.twelvedata.com/quote"
+      configuration: "twelve-data"
     )
-
   quotes(symbol: String): [Quotes]
-  @rest(endpoint: "https://api.twelvedata.com/quote"
-  configuration: "twelve-data"
-  transforms: [{pathpattern: ["<>*"], editor: "objectToArray"}]
-  )
+    @rest(
+      endpoint: "https://api.twelvedata.com/quote"
+      configuration: "twelve-data"
+      transforms: [{ pathpattern: ["<>*"], editor: "objectToArray" }]
+    )
 }

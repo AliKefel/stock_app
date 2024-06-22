@@ -1,3 +1,10 @@
-schema @sdl(files: ["curl/index.graphql", "time_series/index.graphql"]) {
+schema
+  @sdl(
+    files: [
+      "curl/index.graphql"
+      "time_series/index.graphql"
+      "postgresql/index.graphql"
+    ]
+  ) {
   query: Query
 }

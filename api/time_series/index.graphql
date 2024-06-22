@@ -24,9 +24,9 @@ type ValuesEntry {
 }
 
 type Query {
-  time_series(interval: String symbol: String): Root @rest(
-    endpoint: "https://api.twelvedata.com/time_series"
-    configuration: "twelve-data"
-  )
-
+  time_series(interval: String, symbol: String): Root
+    @rest(
+      endpoint: "https://api.twelvedata.com/time_series"
+      configuration: "twelve-data"
+    )
 }

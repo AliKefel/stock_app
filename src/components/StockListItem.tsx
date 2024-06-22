@@ -6,6 +6,16 @@ import Colors from "../constants/Colors";
 import { FontAwesome6 } from '@expo/vector-icons';
 import { MonoText } from "./StyledText";
 import { Link } from "expo-router";
+import { useMutation, gql } from "@apollo/client";
+
+const mutation = gql`
+    mutation MyMutation($symbol:String!, $user_id:String!) {
+    insertFavorites(symbol: $symbol, user_id: $user_id) {
+      id
+      symbol
+      user_id
+    }
+  }`;
 
 type Stock = {
     name: string;
@@ -21,7 +31,16 @@ type StockListItem = {
 }
 
 export default function StockListItem({ stock} : StockListItem ){
+
+
+    const[runMutation] = useMutation(mutation, {variables: {user_id: 'ali', symbol: stock.symbol }});
+
     const change = Number.parseFloat(stock.percent_change);
+
+    const onFavoritesPressed = () => {
+        runMutation();
+    }
+
     return (
     <Link href={'/'+ stock.symbol} asChild>
         <Pressable style = {styles.container}>
@@ -30,7 +49,7 @@ export default function StockListItem({ stock} : StockListItem ){
                 <Text style={styles.symbol}>
                     {stock.symbol}
                     <> </>
-                    <FontAwesome6 name="heart-circle-plus" size={18 } color="gray"  style = {styles.icon} />
+                    <FontAwesome6 onPress={onFavoritesPressed} name="heart-circle-plus" size={18 } color="gray"  style = {styles.icon} />
                 </Text>
 
                 <Text style={{color: 'gray', }} >{stock.name}</Text>
